@@ -1,0 +1,5696 @@
+{
+  "schema_version": 1,
+  "version": "0.3-campaign-p0",
+  "title": "长夜守灯",
+  "source_documents": [
+    {
+      "kind": "系统",
+      "path": "../documents/长夜守灯_系统设计文档.docx",
+      "sha256": "a0599e4263b85ef3a574af824c2521c3b18b53ba623de906f125a4f5bf94711d",
+      "block_count": 240
+    },
+    {
+      "kind": "数值",
+      "path": "../documents/长夜守灯_数值设计文档.docx",
+      "sha256": "797df8463fd3ed9f0c8532f24ad127abed7a8cd56ba4114e1dfb50ffd4232347",
+      "block_count": 277
+    },
+    {
+      "kind": "战斗",
+      "path": "../documents/长夜守灯_战斗设计文档.docx",
+      "sha256": "a4d56ce02d32ae2a055f35891bf86e2869d70ddcc8d892e67190aed228287d97",
+      "block_count": 262
+    }
+  ],
+  "rules": {
+    "coordinate_units": "meters",
+    "world_transform": "UE=(100*x,-100*y,100*z); yaw=-document_yaw",
+    "angle_zero_axis": "+X",
+    "angle_positive": "counterclockwise in design plane",
+    "defense_initial": 100,
+    "own_route_policy": "nearest_authored_polyline_all_ties",
+    "own_route_tie_tolerance_m": 1e-06,
+    "side_route_policy": "entry_id_not_in_current_lamp_route_ids",
+    "energy_initial": 40,
+    "energy_capacity": 100,
+    "basic_energy_gain": 5,
+    "skill_energy_gain": 10,
+    "basic_energy_window_seconds": 1,
+    "basic_energy_window_cap": 15,
+    "skill_energy_window_seconds": 3,
+    "skill_energy_window_cap": 20,
+    "energy_window_boundary": "(t-window,t]",
+    "relay_min_seconds": 8,
+    "relay_prepare_energy": 80,
+    "relay_wait_max_seconds": 1,
+    "task_fallback_energy_per_second": 20,
+    "countdown_seconds": 5,
+    "batch_warning_seconds": 5,
+    "spawn_spacing_seconds": 0.35,
+    "main_enemy_cap": 24,
+    "hazard_enemy_cap": 32,
+    "task_block_radius_m": 3,
+    "station_offsets_m": [
+      [
+        -2,
+        0
+      ],
+      [
+        0,
+        -2
+      ],
+      [
+        2,
+        0
+      ]
+    ],
+    "station_radius_m": 6,
+    "melee_chase_radius_m": 8,
+    "ranged_range_m": 14,
+    "character_speed_mps": 4.5,
+    "melee_attack_range_m": 2.5,
+    "decision_interval_seconds": 0.1,
+    "basic_windup_seconds": 0.3,
+    "basic_action_seconds": 1,
+    "skill_windup_seconds": 0.4,
+    "skill_action_seconds": 0.6,
+    "skill1_cooldown_seconds": 6,
+    "skill2_cooldown_seconds": 10,
+    "cooldown_start": "action_accepted",
+    "dodge_cooldown_seconds": 4,
+    "dodge_warning_horizon_seconds": 0.2,
+    "dodge_action_seconds": 0.35,
+    "dodge_immunity_seconds": 0.2,
+    "dodge_distance_m": 2,
+    "revive_seconds": 8,
+    "mark_seconds": 6,
+    "root_seconds": 2,
+    "slow_seconds": 2,
+    "slow_multiplier": 0.6,
+    "displacement_m": 3,
+    "heavy_hit_stagger_seconds": 0.3,
+    "character_stagger_protection_seconds": 2,
+    "heavy_interrupt_protection_seconds": 8,
+    "resonance_max": 100,
+    "resonance_basic_damage": 1,
+    "resonance_skill_damage": 4,
+    "resonance_stun_seconds": 2,
+    "dismantle_radius_m": 3,
+    "dismantle_seconds": 4,
+    "dismantle_retry_seconds": 1,
+    "fault_seconds": 6,
+    "basic_cone_degrees": 120,
+    "default_cone_radius_m": 3,
+    "default_line_length_m": 12,
+    "default_line_width_m": 2,
+    "default_area_radius_m": 4,
+    "synergy_damage_budget": 240,
+    "arrow_speed_mps": 16,
+    "light_breach_loss": 10,
+    "heavy_breach_loss": 20,
+    "assistance_breach_multiplier": 0.5,
+    "camera_pitch_degrees": 35,
+    "camera_height_m": 42,
+    "camera_zoom_heights_m": [
+      42,
+      70
+    ],
+    "enemy_hp_level_step": 0.01,
+    "enemy_attack_level_step": 0.005,
+    "enemy_base_level": 70,
+    "activity_days": 21,
+    "reward_astrite_total": 600,
+    "reward_shell_total": 300000,
+    "training": {
+      "stage_id": "main_01",
+      "lamp_id": "L1",
+      "module": 0,
+      "team": [
+        "rover_spectro",
+        "jinhsi",
+        "changli"
+      ],
+      "targets": [
+        {
+          "enemy": "judgment",
+          "hp": 10000,
+          "offset_m": [
+            -2,
+            4
+          ]
+        },
+        {
+          "enemy": "abyss",
+          "hp": 10000,
+          "offset_m": [
+            2,
+            4
+          ]
+        }
+      ],
+      "targets_attack": false,
+      "targets_move": false,
+      "completion_event": "relay_committed",
+      "excluded_from_formal_statistics": true,
+      "reset_before_formal_deployment": true
+    }
+  },
+  "characters": [
+    {
+      "id": "rover_spectro",
+      "person_id": "rover",
+      "name": "漂泊者·衍射",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "rover_spectro_1",
+      "skill2_id": "rover_spectro_2",
+      "skill1_name": "凝光扫",
+      "skill2_name": "破隙",
+      "skill1_description": "扇形斩击，轻波定身2秒",
+      "skill2_description": "标记出口最近敌人6秒",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "rover_spectro_0",
+          "description": "爆心追踪标记"
+        },
+        "1": {
+          "id": "rover_spectro_1",
+          "description": "命中标记追加光刃"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "jinhsi",
+      "person_id": "jinhsi",
+      "name": "今汐",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "jinhsi_1",
+      "skill2_id": "jinhsi_2",
+      "skill1_name": "浮光",
+      "skill2_name": "点曜",
+      "skill1_description": "直线贯穿",
+      "skill2_description": "标记巨浪，优先拆灯者",
+      "modules": [
+        1,
+        3
+      ],
+      "coop": {
+        "1": {
+          "id": "jinhsi_1",
+          "description": "标记目标追加龙息"
+        },
+        "3": {
+          "id": "jinhsi_3",
+          "description": "首矢命中标记产生3米溅射"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "changli",
+      "person_id": "changli",
+      "name": "长离",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "changli_1",
+      "skill2_id": "changli_2",
+      "skill1_name": "炎步",
+      "skill2_name": "截翎",
+      "skill1_description": "突进斩击前沿轻波",
+      "skill2_description": "重斩打断拆灯者",
+      "modules": [
+        0,
+        2
+      ],
+      "coop": {
+        "0": {
+          "id": "changli_0",
+          "description": "附带4秒十字火带"
+        },
+        "2": {
+          "id": "changli_2",
+          "description": "末震沿来向追加回斩"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "yangyang",
+      "person_id": "yangyang",
+      "name": "秧秧",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "yangyang_1",
+      "skill2_id": "yangyang_2",
+      "skill1_name": "回风",
+      "skill2_name": "风线",
+      "skill1_description": "牵引4米内轻波",
+      "skill2_description": "风刃附带40%减速2秒",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "yangyang_0",
+          "description": "爆炸前牵引"
+        },
+        "1": {
+          "id": "yangyang_1",
+          "description": "固定贯阵束线内选择最密集轻波位置，将该点4米内可见轻波向固定束线最近点牵引最多3米，再执行原束线伤害；光束位置方向保持固定，巨浪保持原位，位移受障碍限制。",
+          "source_description": "光束内调整密集目标",
+          "effect": "pull_to_fixed_beam",
+          "gather_radius_m": 4,
+          "max_pull_m": 3,
+          "requires_initial_beam_target": true,
+          "extra_damage": 0
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "chixia",
+      "person_id": "chixia",
+      "name": "炽霞",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "chixia_1",
+      "skill2_id": "chixia_2",
+      "skill1_name": "压枪",
+      "skill2_name": "燃印",
+      "skill1_description": "压制射手2秒",
+      "skill2_description": "命中巨浪并标记",
+      "modules": [
+        1,
+        3
+      ],
+      "coop": {
+        "1": {
+          "id": "chixia_1",
+          "description": "引爆燃印"
+        },
+        "3": {
+          "id": "chixia_3",
+          "description": "追射3发各80"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "baizhi",
+      "person_id": "baizhi",
+      "name": "白芷",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "baizhi_1",
+      "skill2_id": "baizhi_2",
+      "skill1_name": "冻尘",
+      "skill2_name": "羽袭",
+      "skill1_description": "轻波减速40%持续2秒",
+      "skill2_description": "打断最近敌人",
+      "modules": [
+        0,
+        3
+      ],
+      "coop": {
+        "0": {
+          "id": "baizhi_0",
+          "description": "生成2秒冷凝区域"
+        },
+        "3": {
+          "id": "baizhi_3",
+          "description": "首次反击恢复本队15%生命"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "sanhua",
+      "person_id": "sanhua",
+      "name": "散华",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "sanhua_1",
+      "skill2_id": "sanhua_2",
+      "skill1_name": "霜棘",
+      "skill2_name": "碎冰",
+      "skill1_description": "形成4米冰线并减速",
+      "skill2_description": "引爆冰棘并打断",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "sanhua_0",
+          "description": "引爆冰棘"
+        },
+        "1": {
+          "id": "sanhua_1",
+          "description": "沿冰线延展短光束"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "taoqi",
+      "person_id": "taoqi",
+      "name": "桃祈",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "taoqi_1",
+      "skill2_id": "taoqi_2",
+      "skill1_name": "御反",
+      "skill2_name": "破阵",
+      "skill1_description": "近战反斩并推轻波3米",
+      "skill2_description": "重斩中止拆解",
+      "modules": [
+        2,
+        3
+      ],
+      "coop": {
+        "2": {
+          "id": "taoqi_2",
+          "description": "首震清空拆解进度"
+        },
+        "3": {
+          "id": "taoqi_3",
+          "description": "防护延长2秒"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "yuanwu",
+      "person_id": "yuanwu",
+      "name": "渊武",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "yuanwu_1",
+      "skill2_id": "yuanwu_2",
+      "skill1_name": "楔震",
+      "skill2_name": "断雷",
+      "skill1_description": "4秒雷击区域",
+      "skill2_description": "优先打断拆灯者",
+      "modules": [
+        2,
+        1
+      ],
+      "coop": {
+        "2": {
+          "id": "yuanwu_2",
+          "description": "每震追击一名巨浪"
+        },
+        "1": {
+          "id": "yuanwu_1",
+          "description": "命中雷楔内目标产生电爆"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "jiyan",
+      "person_id": "jiyan",
+      "name": "忌炎",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "jiyan_1",
+      "skill2_id": "jiyan_2",
+      "skill1_name": "横阵",
+      "skill2_name": "龙势",
+      "skill1_description": "横扫并推轻波3米",
+      "skill2_description": "贯刺本路前沿目标",
+      "modules": [
+        0,
+        2
+      ],
+      "coop": {
+        "0": {
+          "id": "jiyan_0",
+          "description": "将边缘轻波推向爆心"
+        },
+        "2": {
+          "id": "jiyan_2",
+          "description": "末震推回6米"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "jianxin",
+      "person_id": "jianxin",
+      "name": "鉴心",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "jianxin_1",
+      "skill2_id": "jianxin_2",
+      "skill1_name": "回掌",
+      "skill2_name": "归涡",
+      "skill1_description": "反击并推轻波3米",
+      "skill2_description": "牵引4米内轻波",
+      "modules": [
+        0,
+        3
+      ],
+      "coop": {
+        "0": {
+          "id": "jianxin_0",
+          "description": "爆炸前聚敌"
+        },
+        "3": {
+          "id": "jianxin_3",
+          "description": "反击上限增至5次"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "yinlin",
+      "person_id": "yinlin",
+      "name": "吟霖",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "yinlin_1",
+      "skill2_id": "yinlin_2",
+      "skill1_name": "缚丝",
+      "skill2_name": "罚雷",
+      "skill1_description": "轻波定身2秒",
+      "skill2_description": "标记至多两名敌人",
+      "modules": [
+        1,
+        2
+      ],
+      "coop": {
+        "1": {
+          "id": "yinlin_1",
+          "description": "两标记间传导"
+        },
+        "2": {
+          "id": "yinlin_2",
+          "description": "末震使标记轻波定身2秒"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "mortefi",
+      "person_id": "mortefi",
+      "name": "莫特斐",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "mortefi_1",
+      "skill2_id": "mortefi_2",
+      "skill1_name": "火羽",
+      "skill2_name": "爆签",
+      "skill1_description": "远程点射射手",
+      "skill2_description": "攻击巨浪并附着爆签",
+      "modules": [
+        0,
+        3
+      ],
+      "coop": {
+        "0": {
+          "id": "mortefi_0",
+          "description": "爆签连锁爆炸"
+        },
+        "3": {
+          "id": "mortefi_3",
+          "description": "光矢附带火羽至多3次"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "xiangliyao",
+      "person_id": "xiangliyao",
+      "name": "相里要",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "xiangliyao_1",
+      "skill2_id": "xiangliyao_2",
+      "skill1_name": "重拳",
+      "skill2_name": "解构",
+      "skill1_description": "打断拆灯者",
+      "skill2_description": "标记最近巨浪破绽",
+      "modules": [
+        1,
+        2
+      ],
+      "coop": {
+        "1": {
+          "id": "xiangliyao_1",
+          "description": "标记目标追加集中打击"
+        },
+        "2": {
+          "id": "xiangliyao_2",
+          "description": "额外削减巨浪20点共振"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "lingyang",
+      "person_id": "lingyang",
+      "name": "凌阳",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "lingyang_1",
+      "skill2_id": "lingyang_2",
+      "skill1_name": "跃击",
+      "skill2_name": "狮踏",
+      "skill1_description": "跃至突破者前沿攻击",
+      "skill2_description": "连击并推轻波3米",
+      "modules": [
+        2,
+        3
+      ],
+      "coop": {
+        "2": {
+          "id": "lingyang_2",
+          "description": "末震留下4秒减速径"
+        },
+        "3": {
+          "id": "lingyang_3",
+          "description": "防护前缘追加撞击"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "danjin",
+      "person_id": "danjin",
+      "name": "丹瑾",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "danjin_1",
+      "skill2_id": "danjin_2",
+      "skill1_name": "绯锋",
+      "skill2_name": "追刃",
+      "skill1_description": "优先攻击低生命目标",
+      "skill2_description": "标记本路巨浪",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "danjin_0",
+          "description": "优先密集残血敌群"
+        },
+        "1": {
+          "id": "danjin_1",
+          "description": "低于30%生命的标记目标追斩"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "zhezhi",
+      "person_id": "zhezhi",
+      "name": "折枝",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "zhezhi_1",
+      "skill2_id": "zhezhi_2",
+      "skill1_name": "飞鹤",
+      "skill2_name": "墨痕",
+      "skill1_description": "优先攻击射手",
+      "skill2_description": "标记本路最前沿敌人",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "zhezhi_0",
+          "description": "标记位置附加3米爆破"
+        },
+        "1": {
+          "id": "zhezhi_1",
+          "description": "追击次近目标"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "verina",
+      "person_id": "verina",
+      "name": "维里奈",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "verina_1",
+      "skill2_id": "verina_2",
+      "skill1_name": "藤拍",
+      "skill2_name": "叶矢",
+      "skill1_description": "缠住轻波2秒",
+      "skill2_description": "标记本灯近处敌人",
+      "modules": [
+        0,
+        3
+      ],
+      "coop": {
+        "0": {
+          "id": "verina_0",
+          "description": "燃区进入者首次定身2秒"
+        },
+        "3": {
+          "id": "verina_3",
+          "description": "防护每秒回复本队2%生命"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "youhu",
+      "person_id": "youhu",
+      "name": "釉瑚",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "youhu_1",
+      "skill2_id": "youhu_2",
+      "skill1_name": "鼎击",
+      "skill2_name": "如意",
+      "skill1_description": "冰器砸击并减速",
+      "skill2_description": "挥击打断单体",
+      "modules": [
+        2,
+        3
+      ],
+      "coop": {
+        "2": {
+          "id": "youhu_2",
+          "description": "末震附加范围碎冰"
+        },
+        "3": {
+          "id": "youhu_3",
+          "description": "拦箭触发冰刺至多2次"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "lumi",
+      "person_id": "lumi",
+      "name": "灯灯",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "lumi_1",
+      "skill2_id": "lumi_2",
+      "skill1_name": "闪行",
+      "skill2_name": "追光",
+      "skill1_description": "迎击轻波并归位",
+      "skill2_description": "优先射击侧路射手",
+      "modules": [
+        1,
+        3
+      ],
+      "coop": {
+        "1": {
+          "id": "lumi_1",
+          "description": "束端追加追光弹"
+        },
+        "3": {
+          "id": "lumi_3",
+          "description": "主动矢分配两路目标",
+          "target_allocation": "A_B_A_when_two_distinct_legal_entry_routes_exist"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined",
+      "skill2_target_policy": [
+        "shooter_outside_lamp_route_ids",
+        "shooter_inside_lamp_route_ids",
+        "other_legal_target"
+      ]
+    },
+    {
+      "id": "buling",
+      "person_id": "buling",
+      "name": "卜灵",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "buling_1",
+      "skill2_id": "buling_2",
+      "skill1_name": "落雷",
+      "skill2_name": "雷符",
+      "skill1_description": "标记最近巨浪",
+      "skill2_description": "攻击轻波并定身2秒",
+      "modules": [
+        0,
+        1
+      ],
+      "coop": {
+        "0": {
+          "id": "buling_0",
+          "description": "爆炸后2秒追加落雷"
+        },
+        "1": {
+          "id": "buling_1",
+          "description": "命中雷符后分出雷束"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "aalto",
+      "person_id": "aalto",
+      "name": "秋水",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "aalto_1",
+      "skill2_id": "aalto_2",
+      "skill1_name": "雾弹",
+      "skill2_name": "雾饵",
+      "skill1_description": "射手失准2秒",
+      "skill2_description": "诱导轻波3秒后爆炸",
+      "modules": [
+        0,
+        3
+      ],
+      "coop": {
+        "0": {
+          "id": "aalto_0",
+          "description": "爆炸前短暂引敌"
+        },
+        "3": {
+          "id": "aalto_3",
+          "description": "首矢使射手失准2秒"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "encore",
+      "person_id": "encore",
+      "name": "安可",
+      "ranged": true,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "encore_1",
+      "skill2_id": "encore_2",
+      "skill1_name": "白咩弹",
+      "skill2_name": "黑咩踏",
+      "skill1_description": "小范围爆破",
+      "skill2_description": "打断近处敌人",
+      "modules": [
+        0,
+        2
+      ],
+      "coop": {
+        "0": {
+          "id": "encore_0",
+          "description": "1.5秒后回响爆破"
+        },
+        "2": {
+          "id": "encore_2",
+          "description": "第二震设延时2秒爆点"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "camellya",
+      "person_id": "camellya",
+      "name": "椿",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "camellya_1",
+      "skill2_id": "camellya_2",
+      "skill1_name": "缠枝",
+      "skill2_name": "花旋",
+      "skill1_description": "轻波牵引至灯侧",
+      "skill2_description": "4秒旋转攻击区域",
+      "modules": [
+        0,
+        2
+      ],
+      "coop": {
+        "0": {
+          "id": "camellya_0",
+          "description": "燃烧结束时藤花爆破"
+        },
+        "2": {
+          "id": "camellya_2",
+          "description": "末震牵引轻波"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "calcharo",
+      "person_id": "calcharo",
+      "name": "卡卡罗",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "calcharo_1",
+      "skill2_id": "calcharo_2",
+      "skill1_name": "影斩",
+      "skill2_name": "逐猎",
+      "skill1_description": "优先追击巨浪",
+      "skill2_description": "标记正在拆灯的目标",
+      "modules": [
+        1,
+        3
+      ],
+      "coop": {
+        "1": {
+          "id": "calcharo_1",
+          "description": "束端投影斩击"
+        },
+        "3": {
+          "id": "calcharo_3",
+          "description": "标记命中后追反斩"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    },
+    {
+      "id": "yangyang_xuanling",
+      "person_id": "yangyang",
+      "name": "秧秧·玄翎",
+      "ranged": false,
+      "hp": 1000,
+      "basic_damage": 30,
+      "basic_seconds": 1,
+      "skill1_damage": 90,
+      "skill2_damage": 150,
+      "skill1_id": "yangyang_xuanling_1",
+      "skill2_id": "yangyang_xuanling_2",
+      "skill1_name": "苍剑",
+      "skill2_name": "羽剑",
+      "skill1_description": "横斩并打断拆灯者",
+      "skill2_description": "轻波牵引至攻击线",
+      "modules": [
+        1,
+        2
+      ],
+      "coop": {
+        "1": {
+          "id": "yangyang_xuanling_1",
+          "description": "同线羽刃追击"
+        },
+        "2": {
+          "id": "yangyang_xuanling_2",
+          "description": "末震沿路线羽刃追击"
+        }
+      },
+      "basic_classification_source": "Implementation archetype; skill targeting and geometry remain source-defined"
+    }
+  ],
+  "lamps": [
+    {
+      "id": "flame",
+      "name": "聚焰",
+      "module": 0,
+      "range_m": 18,
+      "radius_m": 6,
+      "damage": 600,
+      "tick_damage": 100,
+      "tick_seconds": 1,
+      "duration": 4
+    },
+    {
+      "id": "beam",
+      "name": "贯阵",
+      "module": 1,
+      "range_m": 28,
+      "width_m": 3,
+      "damage": 600,
+      "heavy_bonus_damage": 900,
+      "heavy_bonus_target_cap": 1
+    },
+    {
+      "id": "shock",
+      "name": "震域",
+      "module": 2,
+      "range_m": 10,
+      "radius_m": 10,
+      "damage": 330,
+      "pulses": [
+        0,
+        1,
+        2
+      ],
+      "push_m": 3,
+      "resonance_damage": 15
+    },
+    {
+      "id": "reflect",
+      "name": "返照",
+      "module": 3,
+      "range_m": 18,
+      "radius_m": 8,
+      "damage": 250,
+      "active_arrows": 3,
+      "counter_damage": 250,
+      "counter_cap": 3,
+      "duration": 6
+    }
+  ],
+  "enemies": {
+    "judgment": {
+      "id": "judgment",
+      "name": "审判战士",
+      "hp": 1000,
+      "damage": 80,
+      "interval": 2,
+      "speed_mps": 2,
+      "role": "breakthrough",
+      "heavy": false,
+      "breach_loss": 10,
+      "range_m": 2.5
+    },
+    "weeping": {
+      "id": "weeping",
+      "name": "鸣泣战士",
+      "hp": 900,
+      "damage": 70,
+      "interval": 1.5,
+      "speed_mps": 2.2,
+      "role": "breakthrough",
+      "heavy": false,
+      "breach_loss": 10,
+      "range_m": 2.5
+    },
+    "hunter": {
+      "id": "hunter",
+      "name": "惊蛰猎手",
+      "hp": 800,
+      "damage": 90,
+      "interval": 3,
+      "speed_mps": 2,
+      "role": "ranged",
+      "heavy": false,
+      "breach_loss": 10,
+      "range_m": 14
+    },
+    "abyss": {
+      "id": "abyss",
+      "name": "冥渊守卫",
+      "hp": 3200,
+      "damage": 150,
+      "interval": 2.5,
+      "speed_mps": 1.5,
+      "role": "dismantle",
+      "heavy": true,
+      "breach_loss": 20,
+      "range_m": 2.5
+    },
+    "rock": {
+      "id": "rock",
+      "name": "磐石守卫",
+      "hp": 3600,
+      "damage": 180,
+      "interval": 3,
+      "speed_mps": 1.2,
+      "role": "dismantle",
+      "heavy": true,
+      "breach_loss": 20,
+      "range_m": 2.5
+    }
+  },
+  "stages": [
+    {
+      "id": "main_01",
+      "name": "断哨留火",
+      "kind": "main",
+      "number": 1,
+      "theme": "双灯教学",
+      "level": 70,
+      "description": "程望在哨仓后门修复线路，漂泊者以两盏灯建立第一道拦截区。教学环节通过固定三人展示协奏触发，随后开放正式配队。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu"
+      ],
+      "available_modules": [
+        0,
+        1
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            28.0,
+            36.0
+          ],
+          "module": 0,
+          "team": [
+            "rover_spectro",
+            "changli",
+            "yangyang"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            72.0,
+            36.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "sanhua",
+            "chixia"
+          ],
+          "priority": 2,
+          "yaw_degrees": 239,
+          "route_ids": [
+            "E2"
+          ],
+          "source_yaw_degrees": 80.0
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            10.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              10.0,
+              58.0
+            ],
+            [
+              18.0,
+              45.0
+            ],
+            [
+              32.0,
+              27.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            18.0,
+            44.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            90.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              90.0,
+              58.0
+            ],
+            [
+              82.0,
+              45.0
+            ],
+            [
+              68.0,
+              27.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            82.0,
+            44.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            43.0,
+            35.0
+          ],
+          [
+            57.0,
+            48.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "T1": [
+          50.0,
+          20.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_01_w1",
+          "name": "灯1校线\n",
+          "batches": [
+            {
+              "id": "main_01_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 6
+            },
+            {
+              "id": "main_01_w1_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_01_w1_task1",
+              "kind": "work",
+              "lamp_ids": [
+                "L1"
+              ],
+              "point_id": "T1",
+              "seconds": 10.0,
+              "from_m": [
+                50.0,
+                20.0
+              ],
+              "to_m": [
+                50.0,
+                20.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 10,
+          "source_goal": "灯1校线\n需亮灯L1，任务10秒",
+          "source_spawn_text": "0秒：E1 审判战士×6；E2 鸣泣战士×4"
+        },
+        {
+          "id": "main_01_w2",
+          "name": "灯2校线\n",
+          "batches": [
+            {
+              "id": "main_01_w2_b01",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_01_w2_b02",
+              "time": 10.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_01_w2_task1",
+              "kind": "work",
+              "lamp_ids": [
+                "L2"
+              ],
+              "point_id": "T1",
+              "seconds": 10.0,
+              "from_m": [
+                50.0,
+                20.0
+              ],
+              "to_m": [
+                50.0,
+                20.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 12,
+          "source_goal": "灯2校线\n需亮灯L2，任务10秒",
+          "source_spawn_text": "0秒：E2 惊蛰猎手×4\n10秒：E1 审判战士×8"
+        }
+      ],
+      "variants": [],
+      "wave_count": 2,
+      "enemy_total": 22,
+      "enemy_cap": 24,
+      "deployment_count": 6,
+      "route_width_m": 6,
+      "source_block": 41,
+      "between_wave_guidance": "波间调度：第2波将炽霞调整为灯2的首位主奏，贯阵方向转向东侧射点。",
+      "unlock_description": "关卡推进：开放4灯、震域灯及第二批9名角色。"
+    },
+    {
+      "id": "main_02",
+      "name": "桥头让路",
+      "kind": "main",
+      "number": 2,
+      "theme": "双桥接力",
+      "level": 75,
+      "description": "两桥担架依序撤离；前排灯负责入口清场，后排灯照顾越过前排的目标。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            18.0,
+            40.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "baizhi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            82.0,
+            40.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "sanhua"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            32.0,
+            22.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "taoqi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            68.0,
+            22.0
+          ],
+          "module": 1,
+          "team": [
+            "rover_spectro",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 2,
+          "yaw_degrees": 25.0,
+          "route_ids": [
+            "E2"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            18.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              18.0,
+              58.0
+            ],
+            [
+              18.0,
+              35.0
+            ],
+            [
+              32.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            19.0,
+            47.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            82.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              82.0,
+              58.0
+            ],
+            [
+              82.0,
+              35.0
+            ],
+            [
+              68.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            81.0,
+            47.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            98.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              98.0,
+              36.0
+            ],
+            [
+              79.0,
+              29.0
+            ],
+            [
+              68.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            79.0,
+            29.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            45.0,
+            29.0
+          ],
+          [
+            55.0,
+            54.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "TW": [
+          30.0,
+          47.0
+        ],
+        "TE": [
+          70.0,
+          47.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_02_w1",
+          "name": "西桥撤离\n",
+          "batches": [
+            {
+              "id": "main_02_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_02_w1_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 2
+            },
+            {
+              "id": "main_02_w1_b03",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_02_w1_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L3"
+              ],
+              "point_id": "TW",
+              "seconds": 12.0,
+              "from_m": [
+                30.0,
+                47.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 18,
+          "source_goal": "西桥撤离\n需亮灯L1+L3，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×8；E3 惊蛰猎手×2\n12秒：E2 鸣泣战士×8"
+        },
+        {
+          "id": "main_02_w2",
+          "name": "东桥撤离\n",
+          "batches": [
+            {
+              "id": "main_02_w2_b01",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_02_w2_b02",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 6
+            },
+            {
+              "id": "main_02_w2_b03",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "abyss",
+              "count": 1
+            },
+            {
+              "id": "main_02_w2_b04",
+              "time": 12.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 3
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_02_w2_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L2",
+                "L4"
+              ],
+              "point_id": "TE",
+              "seconds": 12.0,
+              "from_m": [
+                70.0,
+                47.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 18,
+          "source_goal": "东桥撤离\n需亮灯L2+L4，任务12秒",
+          "source_spawn_text": "0秒：E2 鸣泣战士×8；E1 审判战士×6；E3 冥渊守卫×1\n12秒：E3 惊蛰猎手×3"
+        },
+        {
+          "id": "main_02_w3",
+          "name": "西桥撤离\n",
+          "batches": [
+            {
+              "id": "main_02_w3_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 6
+            },
+            {
+              "id": "main_02_w3_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            },
+            {
+              "id": "main_02_w3_b03",
+              "time": 10.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_02_w3_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L3"
+              ],
+              "point_id": "TW",
+              "seconds": 12.0,
+              "from_m": [
+                30.0,
+                47.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 16,
+          "source_goal": "西桥撤离\n需亮灯L1+L3，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×6；E2 鸣泣战士×6\n10秒：E3 惊蛰猎手×4"
+        }
+      ],
+      "variants": [],
+      "wave_count": 3,
+      "enemy_total": 52,
+      "enemy_cap": 24,
+      "deployment_count": 12,
+      "route_width_m": 6,
+      "source_block": 62,
+      "between_wave_guidance": "波间调度：第2波将单体打断角色转向东桥；第3波由灯3衔接返身敌人。",
+      "unlock_description": "关卡推进：开放6灯、返照灯、第三批角色及秧秧的玄翎形态。"
+    },
+    {
+      "id": "main_03",
+      "name": "仓前十步",
+      "kind": "main",
+      "number": 3,
+      "theme": "六灯协防",
+      "level": 80,
+      "description": "程望分三批搬运线缆，前排负责拆灯者，后排清理突破残敌。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            17.0,
+            40.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "baizhi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            50.0,
+            40.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "sanhua"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            83.0,
+            40.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "taoqi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            29.0,
+            22.0
+          ],
+          "module": 3,
+          "team": [
+            "jianxin",
+            "chixia",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            50.0,
+            22.0
+          ],
+          "module": 0,
+          "team": [
+            "encore",
+            "camellya",
+            "mortefi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            71.0,
+            22.0
+          ],
+          "module": 1,
+          "team": [
+            "calcharo",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            12.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              12.0,
+              58.0
+            ],
+            [
+              17.0,
+              37.0
+            ],
+            [
+              29.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            15.0,
+            48.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            88.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              88.0,
+              58.0
+            ],
+            [
+              83.0,
+              37.0
+            ],
+            [
+              71.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            85.0,
+            48.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            50.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              50.0,
+              58.0
+            ],
+            [
+              50.0,
+              41.0
+            ],
+            [
+              50.0,
+              22.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            50.0,
+            50.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            30.0,
+            47.0
+          ],
+          [
+            40.0,
+            54.0
+          ]
+        ],
+        [
+          [
+            60.0,
+            47.0
+          ],
+          [
+            70.0,
+            54.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "T": [
+          50.0,
+          31.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_03_w1",
+          "name": "第1箱\n",
+          "batches": [
+            {
+              "id": "main_03_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_03_w1_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_03_w1_b03",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_03_w1_task1",
+              "kind": "work",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "T",
+              "seconds": 10.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "第1箱\n需亮灯L2+L5，任务10秒",
+          "source_spawn_text": "0秒：E1 审判战士×8；E3 惊蛰猎手×4\n12秒：E2 鸣泣战士×8"
+        },
+        {
+          "id": "main_03_w2",
+          "name": "第2箱\n",
+          "batches": [
+            {
+              "id": "main_03_w2_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "rock",
+              "count": 1
+            },
+            {
+              "id": "main_03_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "abyss",
+              "count": 1
+            },
+            {
+              "id": "main_03_w2_b03",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_03_w2_b04",
+              "time": 14.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_03_w2_b05",
+              "time": 14.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_03_w2_task1",
+              "kind": "work",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "T",
+              "seconds": 10.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "第2箱\n需亮灯L2+L5，任务10秒",
+          "source_spawn_text": "0秒：E1 磐石守卫×1；E2 冥渊守卫×1；E3 惊蛰猎手×4\n14秒：E1 审判战士×8；E2 鸣泣战士×6"
+        },
+        {
+          "id": "main_03_w3",
+          "name": "第3箱\n",
+          "batches": [
+            {
+              "id": "main_03_w3_b01",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "main_03_w3_b02",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_03_w3_b03",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_03_w3_b04",
+              "time": 12.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_03_w3_task1",
+              "kind": "work",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "T",
+              "seconds": 10.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 22,
+          "source_goal": "第3箱\n需亮灯L2+L5，任务10秒",
+          "source_spawn_text": "0秒：E2 冥渊守卫×2；E1 审判战士×8\n12秒：E2 鸣泣战士×8；E3 惊蛰猎手×4"
+        }
+      ],
+      "variants": [],
+      "wave_count": 3,
+      "enemy_total": 62,
+      "enemy_cap": 24,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 82,
+      "between_wave_guidance": "波间调度：第2波将灯4与灯3的队员、模组和索敌优先级同步交换，保留灯5的范围清场能力。",
+      "unlock_description": "关卡推进：开放阵容预设存档及主线4。"
+    },
+    {
+      "id": "main_04",
+      "name": "隔岸应答",
+      "kind": "main",
+      "number": 4,
+      "theme": "故障补位",
+      "level": 85,
+      "description": "桥南终端重新发送分段灯码，玩家通过邻灯交叉火力覆盖预定故障缺口。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            18.0,
+            40.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "calcharo"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            82.0,
+            40.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            27.0,
+            27.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "chixia",
+            "baizhi"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            73.0,
+            27.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "yuanwu"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            38.0,
+            15.0
+          ],
+          "module": 3,
+          "team": [
+            "verina",
+            "mortefi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            62.0,
+            15.0
+          ],
+          "module": 1,
+          "team": [
+            "sanhua",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2",
+            "E3"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            15.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              15.0,
+              58.0
+            ],
+            [
+              18.0,
+              39.0
+            ],
+            [
+              38.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            17.0,
+            49.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            85.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              85.0,
+              58.0
+            ],
+            [
+              82.0,
+              39.0
+            ],
+            [
+              62.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            83.0,
+            49.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            98.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              98.0,
+              36.0
+            ],
+            [
+              84.0,
+              29.0
+            ],
+            [
+              62.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            84.0,
+            30.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            45.0,
+            30.0
+          ],
+          [
+            55.0,
+            54.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "T": [
+          50.0,
+          12.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_04_w1",
+          "name": "灯1与2发信\n",
+          "batches": [
+            {
+              "id": "main_04_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_04_w1_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 6
+            },
+            {
+              "id": "main_04_w1_b03",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_04_w1_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L2"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "灯1与2发信\n需亮灯L1+L2，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×8；E3 惊蛰猎手×6\n12秒：E2 鸣泣战士×6"
+        },
+        {
+          "id": "main_04_w2",
+          "name": "灯3与4发信\n",
+          "batches": [
+            {
+              "id": "main_04_w2_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "main_04_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            },
+            {
+              "id": "main_04_w2_b03",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_04_w2_b04",
+              "time": 14.0,
+              "entry": "E2",
+              "enemy": "judgment",
+              "count": 8
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_04_w2_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L3",
+                "L4"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [
+            {
+              "lamp_id": "L3",
+              "time": 12.0,
+              "seconds": 6.0,
+              "warning_seconds": 3
+            }
+          ],
+          "enemy_total": 20,
+          "source_goal": "灯3与4发信\n需亮灯L3+L4，任务12秒；第12秒L3故障6秒",
+          "source_spawn_text": "0秒：E1 冥渊守卫×2；E2 鸣泣战士×6；E3 惊蛰猎手×4\n14秒：E2 审判战士×8"
+        },
+        {
+          "id": "main_04_w3",
+          "name": "灯5与6发信\n",
+          "batches": [
+            {
+              "id": "main_04_w3_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "main_04_w3_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "abyss",
+              "count": 1
+            },
+            {
+              "id": "main_04_w3_b03",
+              "time": 10.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_04_w3_b04",
+              "time": 10.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_04_w3_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L5",
+                "L6"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 17,
+          "source_goal": "灯5与6发信\n需亮灯L5+L6，任务12秒",
+          "source_spawn_text": "0秒：E1 磐石守卫×2；E2 冥渊守卫×1\n10秒：E2 鸣泣战士×8；E3 惊蛰猎手×6"
+        }
+      ],
+      "variants": [],
+      "wave_count": 3,
+      "enemy_total": 57,
+      "enemy_cap": 24,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 102,
+      "between_wave_guidance": "波间调度：第2波以灯1与5交叉覆盖灯3区域；第3波将主力转向灯5与6。",
+      "unlock_description": "关卡推进：开放主线5的分段转运。"
+    },
+    {
+      "id": "main_05",
+      "name": "灯火接力",
+      "kind": "main",
+      "number": 5,
+      "theme": "转运换防",
+      "level": 90,
+      "description": "程望护送最后一车伤员，车辆分段停靠，每波整备完成一次换防。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            20.0,
+            42.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            20.0,
+            24.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "baizhi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            50.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "sanhua"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            50.0,
+            24.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "yuanwu"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            80.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "lumi",
+            "calcharo",
+            "yinlin"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            80.0,
+            24.0
+          ],
+          "module": 3,
+          "team": [
+            "mortefi",
+            "verina",
+            "youhu"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            12.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              12.0,
+              58.0
+            ],
+            [
+              20.0,
+              40.0
+            ],
+            [
+              50.0,
+              18.0
+            ],
+            [
+              95.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            17.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            50.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              50.0,
+              58.0
+            ],
+            [
+              50.0,
+              39.0
+            ],
+            [
+              70.0,
+              18.0
+            ],
+            [
+              95.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            50.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            88.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              88.0,
+              58.0
+            ],
+            [
+              80.0,
+              40.0
+            ],
+            [
+              87.0,
+              17.0
+            ],
+            [
+              95.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            83.0,
+            50.0
+          ]
+        }
+      ],
+      "obstacles_m": [],
+      "task_points": {
+        "S1": [
+          20.0,
+          12.0
+        ],
+        "S2": [
+          50.0,
+          12.0
+        ],
+        "S3": [
+          80.0,
+          12.0
+        ]
+      },
+      "exit_m": [
+        95.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_05_w1",
+          "name": "停靠1→2\n",
+          "batches": [
+            {
+              "id": "main_05_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_05_w1_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_05_w1_b03",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_05_w1_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L2"
+              ],
+              "point_id": "S1",
+              "seconds": 16.0,
+              "from_m": [
+                20.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 18,
+          "source_goal": "停靠1→2\n需亮灯L1+L2，任务16秒",
+          "source_spawn_text": "0秒：E1 审判战士×8；E2 惊蛰猎手×4\n12秒：E2 鸣泣战士×6"
+        },
+        {
+          "id": "main_05_w2",
+          "name": "停靠2→3\n",
+          "batches": [
+            {
+              "id": "main_05_w2_b01",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "main_05_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_05_w2_b03",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_05_w2_b04",
+              "time": 14.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_05_w2_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L3",
+                "L4"
+              ],
+              "point_id": "S2",
+              "seconds": 16.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                80.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "停靠2→3\n需亮灯L3+L4，任务16秒",
+          "source_spawn_text": "0秒：E3 冥渊守卫×2；E2 鸣泣战士×8；E3 惊蛰猎手×4\n14秒：E1 审判战士×6"
+        },
+        {
+          "id": "main_05_w3",
+          "name": "停靠3→后方\n",
+          "batches": [
+            {
+              "id": "main_05_w3_b01",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "rock",
+              "count": 1
+            },
+            {
+              "id": "main_05_w3_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "abyss",
+              "count": 1
+            },
+            {
+              "id": "main_05_w3_b03",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_05_w3_b04",
+              "time": 12.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_05_w3_b05",
+              "time": 12.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_05_w3_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L5",
+                "L6"
+              ],
+              "point_id": "S3",
+              "seconds": 16.0,
+              "from_m": [
+                80.0,
+                12.0
+              ],
+              "to_m": [
+                95.0,
+                5.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 22,
+          "source_goal": "停靠3→后方\n需亮灯L5+L6，任务16秒",
+          "source_spawn_text": "0秒：E3 磐石守卫×1；E2 冥渊守卫×1；E1 审判战士×8\n12秒：E2 鸣泣战士×8；E3 惊蛰猎手×4"
+        }
+      ],
+      "variants": [],
+      "wave_count": 3,
+      "enemy_total": 60,
+      "enemy_cap": 24,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 123,
+      "between_wave_guidance": "波间调度：第2波将灯1、2与灯3、4的队员、模组及优先级同步交换；第3波将主力转向灯5、6，前段保留范围火力。",
+      "unlock_description": "关卡推进：开放主线6的交接结局。"
+    },
+    {
+      "id": "main_06",
+      "name": "最后一束信号",
+      "kind": "main",
+      "number": 6,
+      "theme": "信号交接",
+      "level": 90,
+      "description": "程望核对伤员人数，完成三路灯码并获得后方回应。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            18.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "sanhua"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            50.0,
+            42.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            82.0,
+            42.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "yuanwu"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            18.0,
+            22.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "baizhi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            50.0,
+            22.0
+          ],
+          "module": 0,
+          "team": [
+            "camellya",
+            "mortefi",
+            "verina"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            82.0,
+            22.0
+          ],
+          "module": 1,
+          "team": [
+            "calcharo",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            12.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              12.0,
+              58.0
+            ],
+            [
+              18.0,
+              41.0
+            ],
+            [
+              18.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            16.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            50.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              50.0,
+              58.0
+            ],
+            [
+              50.0,
+              41.0
+            ],
+            [
+              50.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            50.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            88.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              88.0,
+              58.0
+            ],
+            [
+              82.0,
+              41.0
+            ],
+            [
+              82.0,
+              20.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            84.0,
+            50.0
+          ]
+        }
+      ],
+      "obstacles_m": [],
+      "task_points": {
+        "T": [
+          50.0,
+          12.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "main_06_w1",
+          "name": "灯1与4灯码\n",
+          "batches": [
+            {
+              "id": "main_06_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_06_w1_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_06_w1_b03",
+              "time": 12.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_06_w1_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L4"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "灯1与4灯码\n需亮灯L1+L4，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×8；E2 鸣泣战士×8\n12秒：E3 惊蛰猎手×4"
+        },
+        {
+          "id": "main_06_w2",
+          "name": "灯2与5灯码\n",
+          "batches": [
+            {
+              "id": "main_06_w2_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "main_06_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "rock",
+              "count": 1
+            },
+            {
+              "id": "main_06_w2_b03",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "main_06_w2_b04",
+              "time": 14.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_06_w2_b05",
+              "time": 14.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_06_w2_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 21,
+          "source_goal": "灯2与5灯码\n需亮灯L2+L5，任务12秒",
+          "source_spawn_text": "0秒：E1 冥渊守卫×2；E2 磐石守卫×1；E3 惊蛰猎手×4\n14秒：E1 审判战士×8；E2 鸣泣战士×6"
+        },
+        {
+          "id": "main_06_w3",
+          "name": "灯3与6灯码\n",
+          "batches": [
+            {
+              "id": "main_06_w3_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "main_06_w3_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "main_06_w3_b03",
+              "time": 10.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 8
+            },
+            {
+              "id": "main_06_w3_b04",
+              "time": 10.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 8
+            },
+            {
+              "id": "main_06_w3_b05",
+              "time": 10.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "main_06_w3_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L3",
+                "L6"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [
+            {
+              "lamp_id": "L6",
+              "time": 12.0,
+              "seconds": 6.0,
+              "warning_seconds": 3
+            }
+          ],
+          "enemy_total": 24,
+          "source_goal": "灯3与6灯码\n需亮灯L3+L6，任务12秒；第12秒L6故障6秒",
+          "source_spawn_text": "0秒：E1 磐石守卫×2；E3 冥渊守卫×2\n10秒：E1 审判战士×8；E2 鸣泣战士×8；E3 惊蛰猎手×4"
+        }
+      ],
+      "variants": [],
+      "wave_count": 3,
+      "enemy_total": 65,
+      "enemy_cap": 24,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 143,
+      "between_wave_guidance": "波间调度：巨浪波为贯阵重新定向，灯6故障时由灯5的聚焰覆盖出口。",
+      "unlock_description": "关卡推进：同时开放全部3关险境复演。"
+    },
+    {
+      "id": "hazard_01",
+      "name": "双桥叠压",
+      "kind": "hazard",
+      "number": 1,
+      "theme": "双路撤离",
+      "level": 95,
+      "description": "复演双桥记录，加入中桥交汇区与两侧射台。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            18.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "calcharo"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            82.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "sanhua",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            55.5,
+            25.25
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "source_position_m": [
+            50.0,
+            41.0
+          ],
+          "route_ids": [
+            "E4"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            28.0,
+            22.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "chixia",
+            "baizhi"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            72.0,
+            22.0
+          ],
+          "module": 3,
+          "team": [
+            "verina",
+            "mortefi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            50.0,
+            19.0
+          ],
+          "module": 0,
+          "team": [
+            "camellya",
+            "buling",
+            "danjin"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3",
+            "E4"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            13.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              13.0,
+              58.0
+            ],
+            [
+              18.0,
+              41.0
+            ],
+            [
+              28.0,
+              22.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            16.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            87.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              87.0,
+              58.0
+            ],
+            [
+              82.0,
+              41.0
+            ],
+            [
+              72.0,
+              22.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            84.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            2.0,
+            37.0
+          ],
+          "route_m": [
+            [
+              2.0,
+              37.0
+            ],
+            [
+              23.0,
+              32.0
+            ],
+            [
+              35.0,
+              18.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            18.0,
+            33.0
+          ]
+        },
+        {
+          "id": "E4",
+          "position_m": [
+            98.0,
+            37.0
+          ],
+          "route_m": [
+            [
+              98.0,
+              37.0
+            ],
+            [
+              77.0,
+              32.0
+            ],
+            [
+              65.0,
+              18.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            82.0,
+            33.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            45.0,
+            26.0
+          ],
+          [
+            55.0,
+            36.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "TW": [
+          30.0,
+          48.0
+        ],
+        "TE": [
+          70.0,
+          48.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "hazard_01_w1",
+          "name": "西桥撤离\n",
+          "batches": [
+            {
+              "id": "hazard_01_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_01_w1_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "hazard_01_w1_b03",
+              "time": 10.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 10
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_01_w1_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L4"
+              ],
+              "point_id": "TW",
+              "seconds": 12.0,
+              "from_m": [
+                30.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 24,
+          "source_goal": "西桥撤离\n需亮灯L1+L4，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×10；E3 惊蛰猎手×4\n10秒：E2 鸣泣战士×10"
+        },
+        {
+          "id": "hazard_01_w2",
+          "name": "东桥撤离\n",
+          "batches": [
+            {
+              "id": "hazard_01_w2_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_01_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_01_w2_b03",
+              "time": 10.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 12
+            },
+            {
+              "id": "hazard_01_w2_b04",
+              "time": 10.0,
+              "entry": "E4",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_01_w2_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "TE",
+              "seconds": 12.0,
+              "from_m": [
+                70.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "东桥撤离\n需亮灯L2+L5，任务12秒",
+          "source_spawn_text": "0秒：E1 冥渊守卫×2；E2 磐石守卫×2\n10秒：E2 鸣泣战士×12；E4 惊蛰猎手×4"
+        },
+        {
+          "id": "hazard_01_w3",
+          "name": "双路撤离\n",
+          "batches": [
+            {
+              "id": "hazard_01_w3_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_01_w3_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 10
+            },
+            {
+              "id": "hazard_01_w3_b03",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "hazard_01_w3_b04",
+              "time": 8.0,
+              "entry": "E4",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_01_w3_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L4"
+              ],
+              "point_id": "TW",
+              "seconds": 12.0,
+              "from_m": [
+                30.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            },
+            {
+              "id": "hazard_01_w3_task2",
+              "kind": "escort",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "TE",
+              "seconds": 12.0,
+              "from_m": [
+                70.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 28,
+          "source_goal": "双路撤离\n需亮灯L1+L4,L2+L5，任务12秒,12秒",
+          "source_spawn_text": "0秒：E1 审判战士×10；E2 鸣泣战士×10\n8秒：E3 惊蛰猎手×4；E4 惊蛰猎手×4"
+        },
+        {
+          "id": "hazard_01_w4",
+          "name": "双路终段\n",
+          "batches": [
+            {
+              "id": "hazard_01_w4_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_01_w4_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_01_w4_b03",
+              "time": 8.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_01_w4_b04",
+              "time": 8.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 10
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_01_w4_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L4"
+              ],
+              "point_id": "TW",
+              "seconds": 12.0,
+              "from_m": [
+                30.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            },
+            {
+              "id": "hazard_01_w4_task2",
+              "kind": "escort",
+              "lamp_ids": [
+                "L2",
+                "L5"
+              ],
+              "point_id": "TE",
+              "seconds": 12.0,
+              "from_m": [
+                70.0,
+                48.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: evacuation destination uses authored defense exit; source gives start and 12-second work"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 24,
+          "source_goal": "双路终段\n需亮灯L1+L4,L2+L5，任务12秒,12秒",
+          "source_spawn_text": "0秒：E1 冥渊守卫×2；E2 磐石守卫×2\n8秒：E1 审判战士×10；E2 鸣泣战士×10"
+        }
+      ],
+      "variants": [
+        {
+          "id": "evacuation_mirror",
+          "name": "撤离镜像",
+          "task_lamp_remap": {
+            "L1": "L2",
+            "L2": "L1",
+            "L4": "L5",
+            "L5": "L4"
+          },
+          "task_point_remap": {
+            "TW": "TE",
+            "TE": "TW"
+          },
+          "reward_stage_id": "hazard_01"
+        }
+      ],
+      "wave_count": 4,
+      "enemy_total": 96,
+      "enemy_cap": 32,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 164,
+      "between_wave_guidance": "波间调度：在双路波分别保留贯阵与返照，交汇灯6优先处理集群。",
+      "unlock_description": "关卡推进：首次完成后开放左右撤离目标镜像变体。"
+    },
+    {
+      "id": "hazard_02",
+      "name": "断线重发",
+      "kind": "hazard",
+      "number": 2,
+      "theme": "故障与拆灯",
+      "level": 100,
+      "description": "复演分段发信，增加背面入口与前移终端。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            25.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "calcharo"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            75.0,
+            42.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            25.0,
+            24.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "chixia",
+            "baizhi"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            75.0,
+            24.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "yuanwu"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E4"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            42.0,
+            14.0
+          ],
+          "module": 3,
+          "team": [
+            "verina",
+            "mortefi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1",
+            "E3"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            58.0,
+            14.0
+          ],
+          "module": 1,
+          "team": [
+            "sanhua",
+            "yinlin",
+            "zhezhi"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2",
+            "E4"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            12.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              12.0,
+              58.0
+            ],
+            [
+              25.0,
+              42.0
+            ],
+            [
+              42.0,
+              14.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            22.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            88.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              88.0,
+              58.0
+            ],
+            [
+              75.0,
+              42.0
+            ],
+            [
+              58.0,
+              14.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            78.0,
+            50.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            2.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              2.0,
+              36.0
+            ],
+            [
+              25.0,
+              28.0
+            ],
+            [
+              42.0,
+              14.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            16.0,
+            35.0
+          ]
+        },
+        {
+          "id": "E4",
+          "position_m": [
+            98.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              98.0,
+              36.0
+            ],
+            [
+              75.0,
+              28.0
+            ],
+            [
+              58.0,
+              14.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            84.0,
+            35.0
+          ]
+        }
+      ],
+      "obstacles_m": [],
+      "task_points": {
+        "T": [
+          50.0,
+          28.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "hazard_02_w1",
+          "name": "灯1与2发信\n",
+          "batches": [
+            {
+              "id": "hazard_02_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_02_w1_b02",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            },
+            {
+              "id": "hazard_02_w1_b03",
+              "time": 8.0,
+              "entry": "E4",
+              "enemy": "weeping",
+              "count": 10
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_02_w1_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L2"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                28.0
+              ],
+              "to_m": [
+                50.0,
+                28.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 24,
+          "source_goal": "灯1与2发信\n需亮灯L1+L2，任务12秒",
+          "source_spawn_text": "0秒：E1 审判战士×10；E3 惊蛰猎手×4\n8秒：E4 鸣泣战士×10"
+        },
+        {
+          "id": "hazard_02_w2",
+          "name": "灯3与4发信\n",
+          "batches": [
+            {
+              "id": "hazard_02_w2_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_02_w2_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_02_w2_b03",
+              "time": 10.0,
+              "entry": "E4",
+              "enemy": "weeping",
+              "count": 12
+            },
+            {
+              "id": "hazard_02_w2_b04",
+              "time": 10.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_02_w2_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L3",
+                "L4"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                28.0
+              ],
+              "to_m": [
+                50.0,
+                28.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [
+            {
+              "lamp_id": "L3",
+              "time": 12.0,
+              "seconds": 6.0,
+              "warning_seconds": 3
+            }
+          ],
+          "enemy_total": 20,
+          "source_goal": "灯3与4发信\n需亮灯L3+L4，任务12秒；第12秒L3故障6秒",
+          "source_spawn_text": "0秒：E1 冥渊守卫×2；E2 磐石守卫×2\n10秒：E4 鸣泣战士×12；E3 惊蛰猎手×4"
+        },
+        {
+          "id": "hazard_02_w3",
+          "name": "灯5与6发信\n",
+          "batches": [
+            {
+              "id": "hazard_02_w3_b01",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_02_w3_b02",
+              "time": 0.0,
+              "entry": "E4",
+              "enemy": "weeping",
+              "count": 10
+            },
+            {
+              "id": "hazard_02_w3_b03",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 6
+            },
+            {
+              "id": "hazard_02_w3_b04",
+              "time": 8.0,
+              "entry": "E1",
+              "enemy": "abyss",
+              "count": 2
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_02_w3_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L5",
+                "L6"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                28.0
+              ],
+              "to_m": [
+                50.0,
+                28.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [
+            {
+              "lamp_id": "L5",
+              "time": 12.0,
+              "seconds": 6.0,
+              "warning_seconds": 3
+            }
+          ],
+          "enemy_total": 28,
+          "source_goal": "灯5与6发信\n需亮灯L5+L6，任务12秒；第12秒L5故障6秒",
+          "source_spawn_text": "0秒：E2 审判战士×10；E4 鸣泣战士×10\n8秒：E3 惊蛰猎手×6；E1 冥渊守卫×2"
+        },
+        {
+          "id": "hazard_02_w4",
+          "name": "灯1与6终报\n",
+          "batches": [
+            {
+              "id": "hazard_02_w4_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_02_w4_b02",
+              "time": 0.0,
+              "entry": "E4",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_02_w4_b03",
+              "time": 8.0,
+              "entry": "E2",
+              "enemy": "judgment",
+              "count": 10
+            },
+            {
+              "id": "hazard_02_w4_b04",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_02_w4_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L6"
+              ],
+              "point_id": "T",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                28.0
+              ],
+              "to_m": [
+                50.0,
+                28.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 20,
+          "source_goal": "灯1与6终报\n需亮灯L1+L6，任务12秒",
+          "source_spawn_text": "0秒：E1 磐石守卫×2；E4 冥渊守卫×2\n8秒：E2 审判战士×10；E3 惊蛰猎手×6"
+        }
+      ],
+      "variants": [
+        {
+          "id": "fault_mirror",
+          "name": "故障换侧",
+          "fault_lamp_remap": {
+            "L3": "L4",
+            "L5": "L6"
+          },
+          "reward_stage_id": "hazard_02"
+        }
+      ],
+      "wave_count": 4,
+      "enemy_total": 92,
+      "enemy_cap": 32,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 184,
+      "between_wave_guidance": "波间调度：故障波将震域小队靠近预定故障灯，返照处理边侧箭矢。",
+      "unlock_description": "关卡推进：首次完成后开放故障灯号镜像变体：L3→L4，L5→L6。"
+    },
+    {
+      "id": "hazard_03",
+      "name": "长夜接班",
+      "kind": "hazard",
+      "number": 3,
+      "theme": "前后双任务",
+      "level": 100,
+      "description": "车辆沿仓外三段推进，后方终端同时向接应部队发送信号。",
+      "available_characters": [
+        "rover_spectro",
+        "jinhsi",
+        "changli",
+        "yangyang",
+        "chixia",
+        "baizhi",
+        "sanhua",
+        "taoqi",
+        "yuanwu",
+        "jiyan",
+        "jianxin",
+        "yinlin",
+        "mortefi",
+        "xiangliyao",
+        "lingyang",
+        "danjin",
+        "zhezhi",
+        "verina",
+        "youhu",
+        "lumi",
+        "buling",
+        "aalto",
+        "encore",
+        "camellya",
+        "calcharo",
+        "yangyang_xuanling"
+      ],
+      "available_modules": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "lamps": [
+        {
+          "id": "L1",
+          "position_m": [
+            20.0,
+            42.0
+          ],
+          "module": 0,
+          "team": [
+            "yangyang",
+            "changli",
+            "encore"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1"
+          ]
+        },
+        {
+          "id": "L2",
+          "position_m": [
+            20.0,
+            24.0
+          ],
+          "module": 3,
+          "team": [
+            "taoqi",
+            "baizhi",
+            "aalto"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E3"
+          ]
+        },
+        {
+          "id": "L3",
+          "position_m": [
+            50.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "jinhsi",
+            "xiangliyao",
+            "sanhua"
+          ],
+          "priority": 1,
+          "yaw_degrees": 268,
+          "route_ids": [
+            "E1",
+            "E2"
+          ],
+          "source_yaw_degrees": 90.0
+        },
+        {
+          "id": "L4",
+          "position_m": [
+            50.0,
+            24.0
+          ],
+          "module": 2,
+          "team": [
+            "jiyan",
+            "lingyang",
+            "yuanwu"
+          ],
+          "priority": 0,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E1",
+            "E2"
+          ]
+        },
+        {
+          "id": "L5",
+          "position_m": [
+            80.0,
+            42.0
+          ],
+          "module": 1,
+          "team": [
+            "lumi",
+            "calcharo",
+            "yinlin"
+          ],
+          "priority": 1,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E2"
+          ]
+        },
+        {
+          "id": "L6",
+          "position_m": [
+            80.0,
+            24.0
+          ],
+          "module": 3,
+          "team": [
+            "mortefi",
+            "verina",
+            "youhu"
+          ],
+          "priority": 2,
+          "yaw_degrees": 90.0,
+          "route_ids": [
+            "E4"
+          ]
+        }
+      ],
+      "entries": [
+        {
+          "id": "E1",
+          "position_m": [
+            10.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              10.0,
+              58.0
+            ],
+            [
+              20.0,
+              42.0
+            ],
+            [
+              50.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            17.0,
+            51.0
+          ]
+        },
+        {
+          "id": "E2",
+          "position_m": [
+            90.0,
+            58.0
+          ],
+          "route_m": [
+            [
+              90.0,
+              58.0
+            ],
+            [
+              80.0,
+              42.0
+            ],
+            [
+              50.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            83.0,
+            51.0
+          ]
+        },
+        {
+          "id": "E3",
+          "position_m": [
+            2.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              2.0,
+              36.0
+            ],
+            [
+              20.0,
+              26.0
+            ],
+            [
+              50.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            13.0,
+            34.0
+          ]
+        },
+        {
+          "id": "E4",
+          "position_m": [
+            98.0,
+            36.0
+          ],
+          "route_m": [
+            [
+              98.0,
+              36.0
+            ],
+            [
+              80.0,
+              26.0
+            ],
+            [
+              50.0,
+              15.0
+            ],
+            [
+              50.0,
+              5.0
+            ]
+          ],
+          "shooter_m": [
+            87.0,
+            34.0
+          ]
+        }
+      ],
+      "obstacles_m": [
+        [
+          [
+            40.0,
+            48.0
+          ],
+          [
+            60.0,
+            53.0
+          ]
+        ]
+      ],
+      "task_points": {
+        "CAR": [
+          50.0,
+          12.0
+        ],
+        "SIG": [
+          50.0,
+          31.0
+        ]
+      },
+      "exit_m": [
+        50.0,
+        5.0
+      ],
+      "waves": [
+        {
+          "id": "hazard_03_w1",
+          "name": "灯1与2护送\n",
+          "batches": [
+            {
+              "id": "hazard_03_w1_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 12
+            },
+            {
+              "id": "hazard_03_w1_b02",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 10
+            },
+            {
+              "id": "hazard_03_w1_b03",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_03_w1_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L1",
+                "L2"
+              ],
+              "point_id": "CAR",
+              "seconds": 16.0,
+              "from_m": [
+                20.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                12.0
+              ],
+              "source_note": "implementation: explicit three cart stops; document only gives CAR center and lamp groups"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 26,
+          "source_goal": "灯1与2护送\n需亮灯L1+L2，任务16秒",
+          "source_spawn_text": "0秒：E1 审判战士×12；E2 鸣泣战士×10\n8秒：E3 惊蛰猎手×4"
+        },
+        {
+          "id": "hazard_03_w2",
+          "name": "灯3与4护送＋灯5与6发信\n",
+          "batches": [
+            {
+              "id": "hazard_03_w2_b01",
+              "time": 0.0,
+              "entry": "E3",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_03_w2_b02",
+              "time": 0.0,
+              "entry": "E4",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_03_w2_b03",
+              "time": 8.0,
+              "entry": "E1",
+              "enemy": "judgment",
+              "count": 12
+            },
+            {
+              "id": "hazard_03_w2_b04",
+              "time": 8.0,
+              "entry": "E2",
+              "enemy": "hunter",
+              "count": 6
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_03_w2_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L3",
+                "L4"
+              ],
+              "point_id": "CAR",
+              "seconds": 16.0,
+              "from_m": [
+                50.0,
+                12.0
+              ],
+              "to_m": [
+                80.0,
+                12.0
+              ],
+              "source_note": "implementation: explicit three cart stops; document only gives CAR center and lamp groups"
+            },
+            {
+              "id": "hazard_03_w2_task2",
+              "kind": "signal",
+              "lamp_ids": [
+                "L5",
+                "L6"
+              ],
+              "point_id": "SIG",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 22,
+          "source_goal": "灯3与4护送＋灯5与6发信\n需亮灯L3+L4,L5+L6，任务16秒,12秒",
+          "source_spawn_text": "0秒：E3 冥渊守卫×2；E4 磐石守卫×2\n8秒：E1 审判战士×12；E2 惊蛰猎手×6"
+        },
+        {
+          "id": "hazard_03_w3",
+          "name": "灯5与6护送＋灯1与2发信\n",
+          "batches": [
+            {
+              "id": "hazard_03_w3_b01",
+              "time": 0.0,
+              "entry": "E2",
+              "enemy": "weeping",
+              "count": 12
+            },
+            {
+              "id": "hazard_03_w3_b02",
+              "time": 0.0,
+              "entry": "E4",
+              "enemy": "judgment",
+              "count": 12
+            },
+            {
+              "id": "hazard_03_w3_b03",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_03_w3_b04",
+              "time": 8.0,
+              "entry": "E1",
+              "enemy": "hunter",
+              "count": 4
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_03_w3_task1",
+              "kind": "escort",
+              "lamp_ids": [
+                "L5",
+                "L6"
+              ],
+              "point_id": "CAR",
+              "seconds": 16.0,
+              "from_m": [
+                80.0,
+                12.0
+              ],
+              "to_m": [
+                50.0,
+                5.0
+              ],
+              "source_note": "implementation: explicit three cart stops; document only gives CAR center and lamp groups"
+            },
+            {
+              "id": "hazard_03_w3_task2",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L2"
+              ],
+              "point_id": "SIG",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 30,
+          "source_goal": "灯5与6护送＋灯1与2发信\n需亮灯L5+L6,L1+L2，任务16秒,12秒",
+          "source_spawn_text": "0秒：E2 鸣泣战士×12；E4 审判战士×12\n8秒：E3 冥渊守卫×2；E1 惊蛰猎手×4"
+        },
+        {
+          "id": "hazard_03_w4",
+          "name": "灯1与6终报码\n",
+          "batches": [
+            {
+              "id": "hazard_03_w4_b01",
+              "time": 0.0,
+              "entry": "E1",
+              "enemy": "rock",
+              "count": 2
+            },
+            {
+              "id": "hazard_03_w4_b02",
+              "time": 0.0,
+              "entry": "E4",
+              "enemy": "abyss",
+              "count": 2
+            },
+            {
+              "id": "hazard_03_w4_b03",
+              "time": 8.0,
+              "entry": "E2",
+              "enemy": "judgment",
+              "count": 12
+            },
+            {
+              "id": "hazard_03_w4_b04",
+              "time": 8.0,
+              "entry": "E3",
+              "enemy": "weeping",
+              "count": 10
+            }
+          ],
+          "tasks": [
+            {
+              "id": "hazard_03_w4_task1",
+              "kind": "signal",
+              "lamp_ids": [
+                "L1",
+                "L6"
+              ],
+              "point_id": "SIG",
+              "seconds": 12.0,
+              "from_m": [
+                50.0,
+                31.0
+              ],
+              "to_m": [
+                50.0,
+                31.0
+              ],
+              "source_note": "document task point"
+            }
+          ],
+          "faults": [],
+          "enemy_total": 26,
+          "source_goal": "灯1与6终报码\n需亮灯L1+L6，任务12秒",
+          "source_spawn_text": "0秒：E1 磐石守卫×2；E4 冥渊守卫×2\n8秒：E2 审判战士×12；E3 鸣泣战士×10"
+        }
+      ],
+      "variants": [
+        {
+          "id": "reverse_transport",
+          "name": "反向转运",
+          "task_lamp_remap": {
+            "L1": "L5",
+            "L2": "L6",
+            "L5": "L1",
+            "L6": "L2"
+          },
+          "mirror_escort_x_m": 50,
+          "reward_stage_id": "hazard_03"
+        }
+      ],
+      "wave_count": 4,
+      "enemy_total": 104,
+      "enemy_cap": 32,
+      "deployment_count": 18,
+      "route_width_m": 6,
+      "source_block": 206,
+      "between_wave_guidance": "波间调度：护送小队沿前中后逐波调整，终端保留两灯反制射手与拆灯者。",
+      "unlock_description": "关卡推进：首次完成后开放反向转运及灯组镜像任务。"
+    }
+  ],
+  "rewards": [
+    {
+      "id": "main_01_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_01",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "main_02_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_02",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "main_03_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_03",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "main_04_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_04",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "main_05_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_05",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "main_06_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "main_06",
+      "astrite": 80,
+      "shell_credits": 40000
+    },
+    {
+      "id": "hazard_01_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "hazard_01",
+      "astrite": 0,
+      "shell_credits": 10000
+    },
+    {
+      "id": "hazard_02_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "hazard_02",
+      "astrite": 0,
+      "shell_credits": 10000
+    },
+    {
+      "id": "hazard_03_first_clear",
+      "kind": "stage_first_clear",
+      "stage_id": "hazard_03",
+      "astrite": 0,
+      "shell_credits": 10000
+    },
+    {
+      "id": "all_main_complete",
+      "kind": "all_main_complete",
+      "stage_ids": [
+        "main_01",
+        "main_02",
+        "main_03",
+        "main_04",
+        "main_05",
+        "main_06"
+      ],
+      "astrite": 120,
+      "shell_credits": 30000
+    }
+  ],
+  "tutorials": [
+    {
+      "id": "t01_training",
+      "stage": "main_01",
+      "wave": 0,
+      "event": "stage_enter",
+      "phase": "training",
+      "title": "协奏与主奏",
+      "text": "漂泊者、今汐、长离共同积累本灯协奏；满100后由首位主奏驱动聚焰。",
+      "completion": "relay_committed",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t01_deploy",
+      "stage": "main_01",
+      "wave": 0,
+      "event": "training_complete",
+      "phase": "preparation",
+      "title": "组成双灯小队",
+      "text": "每灯三人，全场人物唯一；选择模组、席位和贯阵方向后确认开战。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t01_shooters",
+      "stage": "main_01",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "观察射手与通道",
+      "text": "第二波出现射手；比较远程优先、主奏顺序与贯阵朝向，查看哪些协同能实际命中。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t02_four_lamps",
+      "stage": "main_02",
+      "wave": 0,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "四灯接力守桥",
+      "text": "西桥需要灯1、3；东桥需要灯2、4。震域负责推回越过前排的轻波。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t02_dismantle",
+      "stage": "main_02",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "拆灯者与打断",
+      "text": "本波出现巨浪拆灯者；将单体打断与火力转向东桥。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t03_six_lamps",
+      "stage": "main_03",
+      "wave": 0,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "六灯分工与返照",
+      "text": "灯2、5共同支持搬运，中路E3会出现射手。可在整备时将灯2切换为返照，亲自观察拦箭与反击；前后排保留各自职责。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t03_reflect",
+      "stage": "main_03",
+      "wave": 0,
+      "event": "arrow_intercepted",
+      "phase": "combat",
+      "title": "返照已拦箭",
+      "text": "被拦截的箭矢停止伤害，反击次数受本次灯击上限约束。",
+      "completion": "acknowledge",
+      "pause_on_show": false,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t03_swap",
+      "stage": "main_03",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "将防护调到前排",
+      "text": "可交换灯3、4的队员、模组与索敌优先级，同时保留灯5清场火力。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t04_cover",
+      "stage": "main_04",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "预定故障需要邻灯支援",
+      "text": "灯3将在开战12秒后故障6秒；整备时检查灯1、5的补位范围与方向。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t04_warning",
+      "stage": "main_04",
+      "wave": 1,
+      "event": "fault_warning",
+      "phase": "combat",
+      "title": "灯3即将故障",
+      "text": "第9秒公开预告，3秒后发生预定故障。返照处理敌方拆解，预定故障按关卡事件执行。",
+      "completion": "acknowledge",
+      "pause_on_show": false,
+      "repeat_after_completion": false,
+      "replay_available": true,
+      "event_fields": {
+        "lamp": "L3"
+      }
+    },
+    {
+      "id": "t04_energy",
+      "stage": "main_04",
+      "wave": 1,
+      "event": "fault_started",
+      "phase": "combat",
+      "title": "故障中继续积能",
+      "text": "灯效暂时清除，角色仍可通过有效命中积累协奏。",
+      "completion": "acknowledge",
+      "pause_on_show": false,
+      "repeat_after_completion": false,
+      "replay_available": true,
+      "event_fields": {
+        "lamp": "L3",
+        "cause": "scheduled"
+      }
+    },
+    {
+      "id": "t04_relight",
+      "stage": "main_04",
+      "wave": 1,
+      "event": "lamp_relit",
+      "phase": "combat",
+      "title": "恢复后重新点亮",
+      "text": "故障解除后仍需满足协奏、队员与目标条件，才会重新点灯。",
+      "completion": "acknowledge",
+      "pause_on_show": false,
+      "repeat_after_completion": false,
+      "replay_available": true,
+      "event_fields": {
+        "lamp": "L3"
+      }
+    },
+    {
+      "id": "t05_vehicle",
+      "stage": "main_05",
+      "wave": 0,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "任务随车辆前进",
+      "text": "本段依赖灯1、2；车辆周围3米有敌时暂停并保留进度。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t05_redeploy",
+      "stage": "main_05",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "在停靠点换防",
+      "text": "第二段依赖灯3、4，可将前段主力整队交换到中段。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t05_old_route",
+      "stage": "main_05",
+      "wave": 2,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "后段推进与旧路防守",
+      "text": "第三段主力转向灯5、6，前段仍需保留聚焰或震域拦截。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t06_signals",
+      "stage": "main_06",
+      "wave": 0,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "完成三路交接",
+      "text": "三波分别使用灯1、4，灯2、5，灯3、6发送灯码。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t06_heavy",
+      "stage": "main_06",
+      "wave": 1,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "为巨浪选择方向",
+      "text": "本波巨浪集中出现，检查贯阵方向与单体反制分工。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t06_fault",
+      "stage": "main_06",
+      "wave": 2,
+      "event": "preparation_enter",
+      "phase": "preparation",
+      "title": "为灯6故障留出补位",
+      "text": "第三波第9秒预告、第12秒灯6故障6秒，灯5负责补足出口火力。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    },
+    {
+      "id": "t06_finish",
+      "stage": "main_06",
+      "wave": 2,
+      "event": "stage_complete",
+      "phase": "complete",
+      "title": "交接完成",
+      "text": "全部批次与灯码完成，后方回应收到；三个险境同时开放。",
+      "completion": "acknowledge",
+      "pause_on_show": true,
+      "repeat_after_completion": false,
+      "replay_available": true
+    }
+  ],
+  "validation_targets": {
+    "first_relay_seconds": [
+      3,
+      5
+    ],
+    "sustained_relay_seconds": [
+      8,
+      10
+    ],
+    "main_01_defense": 80,
+    "main_06_defense": 60,
+    "hazard_defense": 20,
+    "hazard_distinct_strategies": 2,
+    "hp_multipliers": [
+      0.9,
+      1,
+      1.1
+    ],
+    "batch_time_offsets": [
+      -2,
+      0,
+      2
+    ],
+    "observer_count": 5,
+    "observer_understanding_target": 4
+  },
+  "implementation_defaults": [
+    "Local-space +X is angle zero and counterclockwise positive; UE Y axis is reflected.",
+    "Character basic ranged classification follows weapon/function archetype and is not per-character original-game statistics.",
+    "Evacuation endpoints use the authored exit; hazard 3 explicit cart stops are [20,12],[50,12],[80,12],exit.",
+    "Tutorial projections have fixed 10000 HP, do not attack/move, and end after first real relay; formal waves and stats reset.",
+    "Second camera zoom height is 70m; authored base height remains 42m."
+  ],
+  "counts": {
+    "stages": 9,
+    "waves": 29,
+    "enemies": 610,
+    "persons": 25,
+    "configurations": 26,
+    "skills": 52,
+    "synergies": 52,
+    "reward_conditions": 10
+  },
+  "extracted_at": "2026-10-26T20:19:15.136358+08:00",
+  "shared_spatial_blocks_equal": true
+}
