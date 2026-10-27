@@ -2,6 +2,14 @@
 
 《鸣潮》原创限时战术守线活动设计作品。以灯具模组、驻灯自动战斗、协奏接力和波间整备为核心，设计六个主线关卡与三个险境关卡，分别从系统、数值和战斗三个方向展开。
 
+## 可玩 Demo
+
+Unreal Engine 5.8 制作的 Windows 单机 Demo，将三份设计中的活动流程、协奏接力与关卡配置落地为九关可玩内容。支持正常体验与独立评审模式，评审模式可直接选择关卡和波次。
+
+**[下载免安装游戏与三份设计文档](https://github.com/s1encisi/wuthering-waves-nightwatch-event-design/releases/latest)** · [Demo 介绍](Demo-介绍.md) · [操作说明](Demo-操作说明.md) · [游戏工程](Game)
+
+完整解压 `LongNight-Windows-Portable.zip` 后运行 `LongNight.exe`，或通过 `LaunchReview.cmd` 进入评审模式，无需安装 Unreal Engine。
+
 <a id="document-navigation"></a>
 
 ## 选择设计文档

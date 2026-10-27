@@ -1,0 +1,4 @@
+Id,DisplayName,Role,Level,MaxHealth,AttackDamage,AttackIntervalSeconds,MoveSpeedCmPerSecond,BreakthroughLoss
+judgment,审判战士,突破,70,1000,80,2.0,200,10
+weeping,鸣泣战士,突破,70,900,70,1.5,220,10
+hunter,惊蛰猎手,牵制,70,800,90,3.0,200,10

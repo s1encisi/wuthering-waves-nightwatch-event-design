@@ -1,0 +1,4 @@
+Name,PersonId,DisplayName,bRanged,MaxHealth,BasicDamage,BasicInterval,SkillOneDamage,SkillTwoDamage,SkillOne,SkillTwo,Source
+rover_spectro,rover,漂泊者·衍射,false,300,8,1,18,24,凝光扫,破隙,PDF p5; combat magnitudes provisional
+jinhsi,jinhsi,今汐,true,300,8,1,18,24,浮光,点曜,PDF p5; combat magnitudes provisional
+changli,changli,长离,false,300,8,1,18,24,炎步,截翎,PDF p5; combat magnitudes provisional

@@ -1,0 +1,3 @@
+Name,DisplayName,RangeCm,RadiusCm,WidthCm,Damage,Duration,TickDamage
+flame,聚焰灯,1800,600,0,600,4,100
+beam,贯阵灯,2800,0,300,600,0,0

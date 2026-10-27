@@ -1,0 +1,11 @@
+Game/Binaries/
+Game/Builds/
+Game/DerivedDataCache/
+Game/Intermediate/
+Game/Saved/
+Game/.vs/
+*.sln
+*.suo
+*.obj
+*.exe
+__pycache__/

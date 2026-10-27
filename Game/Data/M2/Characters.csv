@@ -1,0 +1,10 @@
+Name,PersonId,DisplayName,bRanged,MaxHealth,BasicDamage,BasicInterval,SkillOneDamage,SkillTwoDamage,SkillOne,SkillTwo,Source
+rover_spectro,rover,漂泊者·衍射,false,1000,30,1,90,150,凝光扫,破隙,System character table; Numeric base; M2 candidate
+jinhsi,jinhsi,今汐,true,1000,30,1,90,150,浮光,点曜,System character table; Numeric base; ranged classification provisional
+changli,changli,长离,false,1000,30,1,90,150,炎步,截翎,System character table; Numeric base; M2 candidate
+yangyang,yangyang,秧秧,false,1000,30,1,90,150,回风,风线,System character table; Numeric base; named presentation placeholder
+chixia,chixia,炽霞,true,1000,30,1,90,150,压枪,燃印,System character table; Numeric base; named presentation placeholder
+baizhi,baizhi,白芷,true,1000,30,1,90,150,冻尘,羽袭,System character table; Numeric base; named presentation placeholder
+sanhua,sanhua,散华,false,1000,30,1,90,150,霜棘,碎冰,System character table; Numeric base; named presentation placeholder
+taoqi,taoqi,桃祈,false,1000,30,1,90,150,御反,破阵,System character table; Numeric base; named presentation placeholder
+yuanwu,yuanwu,渊武,false,1000,30,1,90,150,楔震,断雷,System character table; Numeric base; named presentation placeholder

@@ -1,0 +1,8 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.8",
+  "Category": "Games",
+  "Description": "Long Night Lantern - offline design prototype",
+  "Modules": [{"Name":"LongNight","Type":"Runtime","LoadingPhase":"Default"}],
+  "Plugins": [{"Name":"PythonScriptPlugin","Enabled":true,"TargetAllowList":["Editor"]},{"Name":"EditorScriptingUtilities","Enabled":true,"TargetAllowList":["Editor"]}]
+}
