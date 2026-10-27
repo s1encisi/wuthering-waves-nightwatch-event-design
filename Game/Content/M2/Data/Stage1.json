@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "scenario_id": "M2_DuanShao",
+  "original_stage_number": 1,
+  "display_name": "断哨留火",
+  "map": "/Game/Maps/L_DuanShao",
+  "game_mode": "/Script/LongNight.LNM2GameMode",
+  "units": "centimeters",
+  "layout_status": "Implementation layout derived from schematic, not a scale reconstruction",
+  "lamp_positions_cm": [[-1000, -250, 0], [1000, -250, 0]],
+  "task_positions_cm": [[-500, 500, 0], [500, 500, 0]],
+  "routes_left_cm": [[-2000, -2000, 65], [-1500, -1000, 65], [-650, 450, 65], [0, 1700, 65]],
+  "routes_right_cm": [[1000, -2400, 65], [1000, -900, 65], [1000, 650, 65], [0, 1700, 65]],
+  "shooter_stations_cm": [[1000, -900, 65], [1100, -900, 65], [1000, -970, 65], [1100, -970, 65]],
+  "seat_offsets_cm": [[-180, 190, 65], [0, 120, 65], [180, 190, 65]],
+  "default_teams": [["rover_spectro", "changli", "yangyang"], ["jinhsi", "sanhua", "chixia"]],
+  "default_modules": [0, 1],
+  "default_beam_yaws_degrees": [-90, -90],
+  "candidate_ids": ["rover_spectro", "jinhsi", "changli", "yangyang", "chixia", "baizhi", "sanhua", "taoqi", "yuanwu"],
+  "lamp_definitions": [
+    {"id": "flame", "module": 0, "range_cm": 1800, "radius_cm": 600, "width_cm": 0, "damage": 600, "duration_seconds": 4, "tick_damage": 100},
+    {"id": "beam", "module": 1, "range_cm": 2800, "radius_cm": 0, "width_cm": 300, "damage": 600, "duration_seconds": 0, "tick_damage": 0}
+  ],
+  "enemy_definitions": [
+    {"id": "judgment", "display_name": "审判战士", "role": "breakthrough", "max_health": 1000, "damage": 80, "attack_interval_seconds": 2, "speed_cm_per_second": 200, "breakthrough_loss": 10},
+    {"id": "weeping", "display_name": "鸣泣战士", "role": "breakthrough", "max_health": 900, "damage": 70, "attack_interval_seconds": 1.5, "speed_cm_per_second": 220, "breakthrough_loss": 10},
+    {"id": "hunter", "display_name": "惊蛰猎手", "role": "ranged", "max_health": 800, "damage": 90, "attack_interval_seconds": 3, "speed_cm_per_second": 200, "breakthrough_loss": 10}
+  ],
+  "warehouse_blocker": {"center_cm": [0, -1150, 220], "size_cm": [800, 600, 440]},
+  "parameters": {
+    "starting_defense": 100,
+    "wave_countdown_seconds": 5,
+    "batch_warning_seconds": 5,
+    "mainline_enemy_cap": 24,
+    "task_required_seconds": 10,
+    "task_enemy_block_radius_cm": 300,
+    "energy_wave_initial": 40,
+    "energy_capacity": 100,
+    "energy_basic_hit": 5,
+    "energy_skill_hit": 10,
+    "energy_basic_cap_per_second": 15,
+    "energy_skill_cap_per_three_seconds": 20,
+    "energy_clear_field_per_second": 20,
+    "relay_min_interval_seconds": 8,
+    "revive_seconds": 8,
+    "basic_action_seconds": [0.3, 0.1, 0.6],
+    "skill_action_seconds": [0.6, 0.1, 0.3],
+    "skill_cooldowns_seconds": [6, 10],
+    "cooldown_start": "action_accepted",
+    "beam_heavy_bonus_damage": 900,
+    "beam_heavy_bonus_target_cap": 1,
+    "damaging_synergy_budget": 240
+  },
+  "waves": [
+    {
+      "wave_number": 1,
+      "task_lamp_index": 0,
+      "task_name": "灯1校线",
+      "batches": [
+        {"id": "w1_left", "at_seconds": 0, "route_index": 0, "enemy_id": "judgment", "count": 6},
+        {"id": "w1_right", "at_seconds": 0, "route_index": 1, "enemy_id": "weeping", "count": 4}
+      ]
+    },
+    {
+      "wave_number": 2,
+      "task_lamp_index": 1,
+      "task_name": "灯2校线",
+      "batches": [
+        {"id": "w2_hunters", "at_seconds": 0, "route_index": 1, "enemy_id": "hunter", "count": 4},
+        {"id": "w2_left", "at_seconds": 10, "route_index": 0, "enemy_id": "judgment", "count": 8}
+      ]
+    }
+  ]
+}
